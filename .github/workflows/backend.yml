@@ -10,7 +10,7 @@ jobs:
 
     services:
       db:    
-        image: postgres:1
+        image: postgres:11
         ports: ['5432:5432']
         env:
           POSTGRES_DB: backend_test
