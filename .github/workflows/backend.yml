@@ -1,5 +1,3 @@
-name: CI
-
 on:
   push:
     branches: [main, briandev, mosesdev, roy-dev, testing-dev]
@@ -11,9 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      db:
+      db:    
         image: postgres:11
         ports: ['5432:5432']
+        env:
+          POSTGRES_DB: backend_test
 
     steps:
       - name: Checkout Code
@@ -35,15 +35,21 @@ jobs:
         run: |
           cd backend
           gem install bundler
+          gem install rails
           bundle install
+
       - name: Prepare Database
         run: |
           cd backend
-          bundle exec rails db:prepare
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          bundle exec rails db:seed
+
       - name: Run Tests
         run: |
           cd backend
           bundle exec rails test
+
       - name: Create Coverage Artifact
         uses: actions/upload-artifact@v2
         with:
