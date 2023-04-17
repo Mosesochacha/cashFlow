@@ -2,9 +2,10 @@ name: Test Workflow
 
 on:
   push:
-    branches: [main]
+    branches: [main, austin-dev, alvin-dev, maxwell, testing-dev]
   pull_request:
-
+    branches: [main, austin-dev, alvin-dev, maxwell, testing-dev]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
