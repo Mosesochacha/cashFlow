@@ -1,28 +1,33 @@
 name: Test Workflow
 
 on:
-  push: 
-    branches: [main, testing-dev]
+  push:
+    branches: [main]
   pull_request:
-    branches: [main, testing-dev]
 
 jobs:
-  tests:
+  build:
     runs-on: ubuntu-latest
-  
-    strategy:
-      matrix:
-        node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: cd frontend
-        run: cd frontend
-      - name: npm install
-        run: npm install
-      - name: tests
-        run: npm test
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'
+
+    - name: Install dependencies
+      run: |
+          cd frontend
+          npm install
+
+    - name: Build
+      run: |
+          cd frontend
+          npm run build
+
+    - name: Run Tests
+      run: |
+          cd frontend
+          npm test
