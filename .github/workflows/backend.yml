@@ -1,0 +1,57 @@
+on:
+  push:
+    branches: [main, briandev, mosesdev, roy-dev, testing-dev]
+  pull_request:
+    branches: [main, briandev, mosesdev, roy-dev, testing-dev]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:    
+        image: postgres:11
+        ports: ['5432:5432']
+        env:
+          POSTGRES_DB: backend_test
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@main
+        with:
+          node-version: '16.x'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.0
+
+      - name: Install Dependencies
+        run: |
+          cd backend
+          gem install bundler
+          gem install rails
+          bundle install
+
+      - name: Prepare Database
+        run: |
+          cd backend
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          bundle exec rails db:seed
+
+      - name: Run Tests
+        run: |
+          cd backend
+          bundle exec rails test
+
+      - name: Create Coverage Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage
+          path: coverage/
