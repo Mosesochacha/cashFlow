@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 
 const Navigation = () => {
     return ( 
-        <section>
+        <section data-testid="Navigation-1">
             <Router>
                 <Navbar />
 

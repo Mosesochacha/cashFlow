@@ -18,5 +18,4 @@ test('should render Naviagtion component', () =>{
     render(<Navigation />);
     const NavigationElement = screen.getByTestId('Navigation-1');
     expect(NavigationElement).toBeInTheDocument();
-    expect(NavigationElement).toContainHTML('<Siwtch>')
 })
